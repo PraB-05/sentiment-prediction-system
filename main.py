@@ -3,7 +3,7 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from pydantic import BaseModel , Field
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 from fastapi import FastAPI , HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
