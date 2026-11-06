@@ -1,0 +1,299 @@
+:root{
+  --bg: #13161b;
+  --bg-soft: #1a1e25;
+  --ink: #ece9e3;
+  --ink-dim: #8c929c;
+  --line: rgba(255,255,255,0.09);
+  --accent: #6c7686;
+  color-scheme: dark;
+}
+
+*{ box-sizing: border-box; }
+
+html,body{
+  margin:0;
+  height:100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Work Sans", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding: 8vh 24px 10vh;
+  transition: background 900ms ease;
+  overflow-x:hidden;
+}
+
+.wrap{
+  width:100%;
+  max-width: 560px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+
+.mark{
+  align-self:flex-start;
+  font-size: 13px;
+  letter-spacing:0.02em;
+  color: var(--ink-dim);
+  margin-bottom: 5vh;
+}
+.mark b{ color: var(--ink); font-weight:600; }
+
+h1{
+  font-family:"Fraunces", serif;
+  font-weight: 380;
+  font-size: clamp(28px, 4.4vw, 40px);
+  line-height:1.22;
+  margin: 0 0 14px;
+  max-width: 15ch;
+}
+
+p.lede{
+  margin:0 0 28px;
+  color: var(--ink-dim);
+  font-size:15px;
+  line-height:1.6;
+  max-width: 38ch;
+}
+
+form{ width:100%; position:relative; }
+
+textarea{
+  width:100%;
+  min-height: 118px;
+  resize: vertical;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--ink);
+  font-family:inherit;
+  font-size:16px;
+  line-height:1.55;
+  padding: 18px 20px;
+  outline:none;
+  transition: border-color 220ms ease, background 900ms ease;
+}
+textarea::placeholder{ color: #565b64; }
+textarea:focus{ border-color: var(--accent); }
+textarea:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top: 16px;
+}
+
+.count{ font-size: 12px; color: var(--ink-dim); }
+
+button{
+  appearance:none;
+  border:none;
+  cursor:pointer;
+  background: var(--ink);
+  color: var(--bg);
+  font-family:inherit;
+  font-weight:600;
+  font-size:14.5px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  transition: transform 160ms ease, opacity 160ms ease, background 900ms ease;
+}
+button:hover{ transform: translateY(-1px); }
+button:active{ transform: translateY(0); }
+button:disabled{ opacity:0.45; cursor:default; transform:none; }
+button:focus-visible{ outline: 2px solid var(--ink); outline-offset: 3px; }
+
+/* ============================================================
+   1. ORB — the animation lives here, and only here. A blurred,
+   morphing glow behind a crisp, static circle that holds the emoji.
+   ============================================================ */
+
+.orb{
+  position:relative;
+  width: 116px;
+  height: 116px;
+  margin: 5vh auto 0;
+  opacity:0;
+  transform: scale(0.001);
+}
+.orb.show{
+  animation: orb-in 600ms cubic-bezier(.2,.9,.25,1) forwards;
+}
+@keyframes orb-in{
+  0%{ opacity:0; transform: scale(0.3); }
+  60%{ opacity:1; }
+  100%{ opacity:1; transform: scale(1); }
+}
+
+.orb-glow{
+  position:absolute;
+  inset: -34px;
+  background: radial-gradient(circle at 38% 32%, var(--accent), transparent 70%);
+  filter: blur(14px);
+  opacity: 0.8;
+  border-radius: 42% 58% 61% 39% / 49% 42% 58% 51%;
+  transition: background 700ms ease;
+  animation: wobble 9s ease-in-out infinite;
+}
+@keyframes wobble{
+  0%,100%{ border-radius: 42% 58% 61% 39% / 49% 42% 58% 51%; }
+  33%{ border-radius: 58% 42% 39% 61% / 41% 55% 45% 59%; }
+  66%{ border-radius: 46% 54% 52% 48% / 58% 46% 54% 42%; }
+}
+
+.orb-face{
+  position:relative;
+  width:100%;
+  height:100%;
+  border-radius: 50%;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1;
+}
+
+.orb-emoji{
+  font-size: 46px;
+  line-height:1;
+  filter: grayscale(1);
+  opacity:0.5;
+  transition: filter 300ms ease, opacity 300ms ease;
+}
+.orb.show .orb-emoji{
+  filter: grayscale(0);
+  opacity:1;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .orb-glow{ animation: none !important; }
+  .orb{ transition:none !important; }
+}
+
+/* ============================================================
+   2. RESULT TEXT — plain, static typography. No motion of its own,
+   just a quiet fade so it doesn't fight the orb for attention.
+   ============================================================ */
+
+.result{
+  margin-top: 18px;
+  opacity:0;
+  transform: translateY(6px);
+  /* same duration and start time as the orb — one reveal, not two */
+  transition: opacity 600ms cubic-bezier(.2,.9,.25,1), transform 600ms cubic-bezier(.2,.9,.25,1);
+}
+.result.show{ opacity:1; transform: translateY(0); }
+
+.emotion-word{
+  font-family:"Fraunces", serif;
+  font-style: italic;
+  font-weight: 560;
+  font-size: clamp(32px, 7vw, 48px);
+  line-height:1;
+  margin:0;
+  text-transform: lowercase;
+}
+
+.confidence{
+  margin: 10px 0 0;
+  color: var(--ink-dim);
+  font-size:14.5px;
+}
+
+.hint, .error{
+  margin-top: 5vh;
+  font-size: 14px;
+  color: var(--ink-dim);
+  max-width: 36ch;
+}
+.error{ color: #e39a8e; }
+
+/* ============================================================
+   3. PROBABILITIES — a distinct, bordered panel of its own, set apart
+   from the orb/result above by a divider and a label. Static bars,
+   no color-morphing, no blur — this is the data, read plainly.
+   ============================================================ */
+
+.spectrum-panel{
+  width:100%;
+  max-width: 420px;
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  opacity:0;
+  transition: opacity 450ms ease 150ms;
+}
+.spectrum-panel.show{ opacity:1; }
+
+.panel-label{
+  margin: 0 0 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-dim);
+  text-align:left;
+}
+
+.spectrum{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.spec-row{
+  display:grid;
+  grid-template-columns: 22px 70px 1fr 38px;
+  align-items:center;
+  gap: 12px;
+}
+.spec-emoji{
+  font-size: 15px;
+  opacity:0.75;
+}
+.spec-label{
+  font-size:12.5px;
+  color: var(--ink-dim);
+  text-align:left;
+}
+.spec-label.lead{ color: var(--ink); font-weight:600; }
+.spec-track{
+  height:7px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: visible; /* let the glow bleed past the fill's own edge */
+  position: relative;
+}
+.spec-fill{
+  position:absolute;
+  left:0; top:0;
+  height:100%;
+  width:0%;
+  border-radius: 999px;
+  transition: width 700ms cubic-bezier(.2,.8,.2,1), box-shadow 700ms ease;
+}
+.spec-pct{
+  font-size:12px;
+  color: var(--ink-dim);
+  text-align:right;
+  font-variant-numeric: tabular-nums;
+}
+
+footer{
+  margin-top: auto;
+  padding-top: 5vh;
+  font-size: 12px;
+  color: #4d525a;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .orb, .result, .spectrum-panel, .spec-fill, button{ transition: none !important; }
+}

@@ -1,11 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How does this read?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,380;0,9..144,560;1,9..144,420&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Sentiment Analysis</h1>
+
+  <div class="wrap">
+    <div class="mark"><b>Tell me</b> · a small reader for how a sentence feels</div>
+
+    <h1>What's sitting with you right now?</h1>
+    <p class="lede">Write a line or two, the way you'd actually say it. I'll read the feeling underneath the words, not just the words themselves.</p>
+
+    <form id="form">
+      <textarea
+        id="text"
+        maxlength="2000"
+        placeholder="I finally finished the project and I don't know whether to celebrate or collapse…"
+        required
+      ></textarea>
+      <div class="row">
+        <span class="count" id="count">0 / 2000</span>
+        <button id="submit" type="submit">Read it</button>
+      </div>
+    </form>
+
+    <!-- 1. ANIMATION — a self-contained orb, purely the moving/morphing visual -->
+    <div class="orb" id="orb">
+      <div class="orb-glow" id="orbGlow"></div>
+      <div class="orb-face">
+        <span class="orb-emoji" id="orbEmoji">·</span>
+      </div>
+    </div>
+
+    <!-- 2. RESULT TEXT — the word and the headline confidence, no animation of its own -->
+    <div class="result" id="result">
+      <p class="emotion-word" id="emotionWord">&nbsp;</p>
+      <p class="confidence" id="confidence"></p>
+    </div>
+
+    <p class="hint" id="hint">Nothing analyzed yet — it'll appear right here.</p>
+    <p class="error" id="error" style="display:none;"></p>
+
+    <!-- 3. PROBABILITIES — a separate panel, its own heading, static bars -->
+    <div class="spectrum-panel" id="spectrumPanel">
+      <h2 class="panel-label">All six readings</h2>
+      <div class="spectrum" id="spectrum"></div>
+    </div>
+
+    <footer>built on a BiGRU emotion classifier</footer>
+  </div>
+
+<script src="/static/script.js"></script>
 </body>
 </html>
